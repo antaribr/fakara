@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Troop 108 - Pine Ridge Adventure Scouts</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        scout: {
+                            green: '#1b4332',
+                            lightgreen: '#2d6a4f',
+                            khaki: '#d4a373',
+                            tan: '#f4a261',
+                            amber: '#e76f51',
+                            forest: '#081c15',
+                            parchment: '#fefae0',
+                            accent: '#e9c46a'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Merriweather', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts & FontAwesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Merriweather:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        .scout-pattern {
+            background-color: #1b4332;
+            background-image: radial-gradient(#2d6a4f 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        .wood-texture {
+            background-color: #2c1a0e;
+            background-image: radial-gradient(#3d2414 1.5px, transparent 1.5px);
+            background-size: 24px 24px;
+        }
+        .badge-shadow {
+            box-shadow: 0 10px 25px -5px rgba(27, 67, 50, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+        .tab-btn.active {
+            border-bottom: 3px solid #e76f51;
+            color: #1b4332;
+            font-weight: 700;
+        }
+        /* Glassmorphism */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2d6a4f;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #1b4332;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between overflow-x-hidden selection:bg-scout-khaki selection:text-scout-forest">
+
+    <div class="bg-scout-amber text-white text-xs sm:text-sm py-2 px-4 text-center font-medium flex items-center justify-center gap-2 shadow-inner">
+        <span class="bg-white/20 px-2 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider">Announcement</span>
+        <span>🌲 Fall Campout & Court of Honor Registration is now OPEN!</span>
+        <button onclick="scrollToSection('events')" class="underline hover:text-scout-parchment font-bold ml-2">View Dates &rarr;</button>
+    </div>
+
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex items-center gap-3 cursor-pointer" onclick="scrollToSection('hero')">
+                    <div class="w-12 h-12 rounded-xl bg-scout-green text-scout-accent flex items-center justify-center text-2xl shadow-md transform hover:rotate-6 transition-transform">
+                        <i class="fa-solid fa-compass"></i>
+                    </div>
+                    <div>
+                        <span class="text-xl font-extrabold tracking-tight text-scout-green block leading-none">TROOP 108</span>
+                        <span class="text-xs font-semibold text-slate-500 tracking-widest uppercase">Pine Ridge Scouts</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Nav -->
+                <nav class="hidden md:flex items-center gap-6 font-medium text-slate-700 text-sm">
+                    <button onclick="scrollToSection('about')" class="hover:text-scout-lightgreen transition">About & Patrols</button>
+                    <button onclick="scrollToSection('advancement')" class="hover:text-scout-lightgreen transition">Rank Tracker</button>
+                    <button onclick="scrollToSection('badges')" class="hover:text-scout-lightgreen transition">Merit Badges</button>
+                    <button onclick="scrollToSection('events')" class="hover:text-scout-lightgreen transition">Events & Campouts</button>
+                    <button onclick="scrollToSection('toolbox')" class="hover:text-scout-lightgreen transition">Scout Toolbox</button>
+                    <button onclick="scrollToSection('quiz')" class="hover:text-scout-lightgreen transition">Skills Quiz</button>
+                </nav>
+
+                <!-- Actions -->
+                <div class="hidden md:flex items-center gap-3">
+                    <button onclick="openModal('joinModal')" class="bg-scout-green hover:bg-scout-lightgreen text-white px-5 py-2.5 rounded-xl font-semibold shadow-md transition transform active:scale-95 flex items-center gap-2">
+                        <i class="fa-solid fa-user-plus text-xs"></i>
+                        <span>Join Troop 108</span>
+                    </button>
+                </div>
+
+                <!-- Mobile menu button -->
+                <button id="mobileMenuBtn" onclick="toggleMobileMenu()" class="md:hidden text-slate-700 p-2 text-xl focus:outline-none">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Nav Menu -->
+        <div id="mobileMenu" class="hidden md:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-6 space-y-3 shadow-lg">
+            <button onclick="scrollToSection('about'); toggleMobileMenu();" class="block w-full text-left py-2 font-medium text-slate-700 hover:text-scout-green">About & Patrols</button>
+            <button onclick="scrollToSection('advancement'); toggleMobileMenu();" class="block w-full text-left py-2 font-medium text-slate-700 hover:text-scout-green">Rank Tracker</button>
+            <button onclick="scrollToSection('badges'); toggleMobileMenu();" class="block w-full text-left py-2 font-medium text-slate-700 hover:text-scout-green">Merit Badges</button>
+            <button onclick="scrollToSection('events'); toggleMobileMenu();" class="block w-full text-left py-2 font-medium text-slate-700 hover:text-scout-green">Events & Campouts</button>
+            <button onclick="scrollToSection('toolbox'); toggleMobileMenu();" class="block w-full text-left py-2 font-medium text-slate-700 hover:text-scout-green">Scout Toolbox</button>
+            <button onclick="scrollToSection('quiz'); toggleMobileMenu();" class="block w-full text-left py-2 font-medium text-slate-700 hover:text-scout-green">Skills Quiz</button>
+            <div class="pt-2">
+                <button onclick="openModal('joinModal'); toggleMobileMenu();" class="w-full bg-scout-green text-white py-3 rounded-xl font-semibold shadow text-center">
+                    Join Troop 108
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+        <section id="hero" class="relative scout-pattern text-white pt-16 pb-24 md:pt-24 md:pb-32 overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-scout-forest/30 to-scout-forest/80 pointer-events-none"></div>
+            
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="grid lg:grid-cols-12 gap-12 items-center">
+                    <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-scout-accent/20 text-scout-accent border border-scout-accent/30 text-xs sm:text-sm font-semibold">
+                            <i class="fa-solid fa-campground"></i> Chartered by Pine Ridge Community Guild • Est. 1958
+                        </div>
+                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight">
+                            Prepared for <span class="text-scout-accent underline decoration-scout-amber decoration-wavy">Life</span>. Guided by Honor.
+                        </h1>
+                        <p class="text-lg sm:text-xl text-slate-200 font-normal leading-relaxed max-w-2xl mx-auto lg:mx-0">
+                            Empowering young leaders through outdoor adventure, community service, survival skills, and lifelong brotherhood in Pine Ridge.
+                        </p>
+                        <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
+                            <button onclick="openModal('joinModal')" class="w-full sm:w-auto bg-scout-amber hover:bg-scout-tan text-white font-bold px-8 py-4 rounded-xl shadow-lg transition transform hover:-translate-y-0.5 active:translate-y-0 text-base">
+                                <i class="fa-solid fa-tree mr-2"></i> Become a Scout
+                            </button>
+                            <button onclick="scrollToSection('events')" class="w-full sm:w-auto bg-white/10 hover:bg-white/20 border border-white/30 text-white font-semibold px-8 py-4 rounded-xl transition backdrop-blur-sm text-base">
+                                <i class="fa-regular fa-calendar-days mr-2"></i> Upcoming Campouts
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Hero Visual Card -->
+                    <div class="lg:col-span-5">
+                        <div class="bg-white text-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl border-4 border-scout-khaki relative">
+                            <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+                                <div>
+                                    <h3 class="font-bold text-lg text-scout-green">Scout Oath Snapshot</h3>
+                                    <p class="text-xs text-slate-500">Living by our core principles every day</p>
+                                </div>
+                                <span class="w-10 h-10 rounded-full bg-scout-parchment text-scout-amber flex items-center justify-center text-lg font-bold">
+                                    <i class="fa-solid fa-award"></i>
+                                </span>
+                            </div>
+                            <blockquote class="italic text-slate-600 my-4 text-sm sm:text-base border-l-4 border-scout-green pl-4 py-1">
+                                "On my honor I will do my best to do my duty to God and my country and to obey the Scout Law..."
+                            </blockquote>
+                            
+                            <!-- Quick Stats Grid -->
+                            <div class="grid grid-cols-3 gap-3 pt-4 border-t border-slate-100 text-center">
+                                <div class="bg-slate-50 p-3 rounded-xl">
+                                    <div class="text-2xl font-extrabold text-scout-green" id="statScouts">48</div>
+                                    <div class="text-[11px] font-semibold text-slate-500 uppercase">Active Scouts</div>
+                                </div>
+                                <div class="bg-slate-50 p-3 rounded-xl">
+                                    <div class="text-2xl font-extrabold text-scout-green" id="statEagles">112</div>
+                                    <div class="text-[11px] font-semibold text-slate-500 uppercase">Eagle Scouts</div>
+                                </div>
+                                <div class="bg-slate-50 p-3 rounded-xl">
+                                    <div class="text-2xl font-extrabold text-scout-green" id="statNights">340+</div>
+                                    <div class="text-[11px] font-semibold text-slate-500 uppercase">Camping Nights</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="py-20 bg-slate-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <span class="text-scout-amber font-bold text-sm tracking-widest uppercase">Troop Structure & Brotherhood</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-scout-forest mt-2">Meet Our Patrols</h2>
+                    <p class="text-slate-600 mt-3 text-lg">Our troop operates on the Patrol Method—fostering teamwork, youth leadership, and camaraderie in small tight-knit teams.</p>
+                </div>
+
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Patrol 1 -->
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                        <div class="w-16 h-16 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center text-3xl mb-5 shadow-inner">
+                            <i class="fa-solid fa-eagle"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900">Screaming Eagles</h3>
+                        <p class="text-xs font-semibold text-scout-green uppercase tracking-wider mb-3">Senior Patrol • 12 Scouts</p>
+                        <p class="text-sm text-slate-600 mb-4">Specializing in high-adventure wilderness trekking and pioneering projects.</p>
+                        <div class="text-xs text-slate-500 bg-slate-50 p-3 rounded-lg border border-slate-100">
+                            <strong>Patrol Leader:</strong> Alex Vance (Star Rank)<br>
+                            <strong>Patrol Cheer:</strong> "Fly High, Reach Sky!"
+                        </div>
+                    </div>
+
+                    <!-- Patrol 2 -->
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                        <div class="w-16 h-16 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center text-3xl mb-5 shadow-inner">
+                            <i class="fa-solid fa-wolf-pack-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900">Timber Wolves</h3>
+                        <p class="text-xs font-semibold text-scout-green uppercase tracking-wider mb-3">Mid Patrol • 10 Scouts</p>
+                        <p class="text-sm text-slate-600 mb-4">Champions of orienteering, knot tying, and campfire cooking competitions.</p>
+                        <div class="text-xs text-slate-500 bg-slate-50 p-3 rounded-lg border border-slate-100">
+                            <strong>Patrol Leader:</strong> Marcus Thorne (1st Class)<br>
+                            <strong>Patrol Cheer:</strong> "Howl Strong, All Night Long!"
+                        </div>
+                    </div>
+
+                    <!-- Patrol 3 -->
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                        <div class="w-16 h-16 rounded-2xl bg-sky-100 text-sky-800 flex items-center justify-center text-3xl mb-5 shadow-inner">
+                            <i class="fa-solid fa-dragon"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900">Shadow Cobras</h3>
+                        <p class="text-xs font-semibold text-scout-green uppercase tracking-wider mb-3">Mid Patrol • 11 Scouts</p>
+                        <p class="text-sm text-slate-600 mb-4">Masters of outdoor survival navigation, night hikes, and camp conservation.</p>
+                        <div class="text-xs text-slate-500 bg-slate-50 p-3 rounded-lg border border-slate-100">
+                            <strong>Patrol Leader:</strong> Samira Patel (2nd Class)<br>
+                            <strong>Patrol Cheer:</strong> "Silent & Swift!"
+                        </div>
+                    </div>
+
+                    <!-- Patrol 4 -->
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                        <div class="w-16 h-16 rounded-2xl bg-orange-100 text-orange-800 flex items-center justify-center text-3xl mb-5 shadow-inner">
+                            <i class="fa-solid fa-fire-flame-curved"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900">Phoenix Patrol</h3>
+                        <p class="text-xs font-semibold text-scout-green uppercase tracking-wider mb-3">New Scout Patrol • 15 Scouts</p>
+                        <p class="text-sm text-slate-600 mb-4">Dedicated to mastering fundamental outdoor skills and earning Tenderfoot rank.</p>
+                        <div class="text-xs text-slate-500 bg-slate-50 p-3 rounded-lg border border-slate-100">
+                            <strong>Troop Guide:</strong> Liam O'Connor (Eagle Candidate)<br>
+                            <strong>Patrol Cheer:</strong> "Rising Up to Lead!"
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="advancement" class="py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <span class="text-scout-green font-bold text-sm tracking-widest uppercase">The Trail to Eagle</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-scout-forest mt-2">Rank Advancement Roadmap</h2>
+                    <p class="text-slate-600 mt-3 text-lg">Click on any rank to view key requirements, badge focus, and leadership requirements.</p>
+                </div>
+
+                <!-- Rank Selector Buttons -->
+                <div class="flex overflow-x-auto gap-3 pb-4 mb-8 justify-start lg:justify-center border-b border-slate-100 no-scrollbar">
+                    <button onclick="selectRank('scout')" id="rankBtn-scout" class="rank-tab px-5 py-3 rounded-xl font-bold text-sm whitespace-nowrap border border-slate-200 bg-scout-green text-white shadow-sm transition">
+                        1. Scout Rank
+                    </button>
+                    <button onclick="selectRank('tenderfoot')" id="rankBtn-tenderfoot" class="rank-tab px-5 py-3 rounded-xl font-bold text-sm whitespace-nowrap border border-slate-200 text-slate-600 hover:bg-slate-100 transition">
+                        2. Tenderfoot
+                    </button>
+                    <button onclick="selectRank('secondClass')" id="rankBtn-secondClass" class="rank-tab px-5 py-3 rounded-xl font-bold text-sm whitespace-nowrap border border-slate-200 text-slate-600 hover:bg-slate-100 transition">
+                        3. Second Class
+                    </button>
+                    <button onclick="selectRank('firstClass')" id="rankBtn-firstClass" class="rank-tab px-5 py-3 rounded-xl font-bold text-sm whitespace-nowrap border border-slate-200 text-slate-600 hover:bg-slate-100 transition">
+                        4. First Class
+                    </button>
+                    <button onclick="selectRank('star')" id="rankBtn-star" class="rank-tab px-5 py-3 rounded-xl font-bold text-sm whitespace-nowrap border border-slate-200 text-slate-600 hover:bg-slate-100 transition">
+                        5. Star
+                    </button>
+                    <button onclick="selectRank('life')" id="rankBtn-life" class="rank-tab px-5 py-3 rounded-xl font-bold text-sm whitespace-nowrap border border-slate-200 text-slate-600 hover:bg-slate-100 transition">
+                        6. Life
+                    </button>
+                    <button onclick="selectRank('eagle')" id="rankBtn-eagle" class="rank-tab px-5 py-3 rounded-xl font-bold text-sm whitespace-nowrap border border-slate-200 text-slate-600 hover:bg-slate-100 transition">
+                        7. Eagle Scout ⭐
+                    </button>
+                </div>
+
+                <!-- Rank Detail Container -->
+                <div id="rankDetailCard" class="bg-slate-50 rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-sm transition-all duration-300">
+                    <!-- Dynamic Javascript Content Injected Here -->
+                </div>
+            </div>
+        </section>
+
+        <section id="badges" class="py-20 bg-slate-900 text-white scout-pattern">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+                    <div>
+                        <span class="text-scout-accent font-bold text-sm tracking-widest uppercase">Skills & Mastery</span>
+                        <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-2">Merit Badge Directory</h2>
+                        <p class="text-slate-300 mt-2">Explore over 130+ skills available in Scouting. Filter Eagle-required vs Elective badges.</p>
+                    </div>
+                    <!-- Badge Filters -->
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="filterBadges('all')" id="badgeFilter-all" class="badge-filter-btn active bg-scout-amber text-white font-semibold px-4 py-2 rounded-xl text-sm transition">All Badges</button>
+                        <button onclick="filterBadges('eagle')" id="badgeFilter-eagle" class="badge-filter-btn bg-white/10 hover:bg-white/20 text-slate-200 font-semibold px-4 py-2 rounded-xl text-sm transition">Eagle Required ⭐</button>
+                        <button onclick="filterBadges('outdoor')" id="badgeFilter-outdoor" class="badge-filter-btn bg-white/10 hover:bg-white/20 text-slate-200 font-semibold px-4 py-2 rounded-xl text-sm transition">Outdoor & Survival</button>
+                        <button onclick="filterBadges('stem')" id="badgeFilter-stem" class="badge-filter-btn bg-white/10 hover:bg-white/20 text-slate-200 font-semibold px-4 py-2 rounded-xl text-sm transition">STEM & Technology</button>
+                    </div>
+                </div>
+
+                <!-- Search Input -->
+                <div class="relative mb-8 max-w-md">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" id="badgeSearch" onkeyup="searchBadges()" placeholder="Search merit badge name or keyword..." class="w-full bg-slate-800/90 text-white pl-11 pr-4 py-3 rounded-xl border border-slate-700 focus:outline-none focus:border-scout-accent text-sm">
+                </div>
+
+                <!-- Merit Badges Grid -->
+                <div id="badgesGrid" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Injected via JS -->
+                </div>
+            </div>
+        </section>
+
+        <section id="events" class="py-20 bg-slate-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <span class="text-scout-amber font-bold text-sm tracking-widest uppercase">Adventures & Service</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-scout-forest mt-2">Upcoming Troop Events</h2>
+                    <p class="text-slate-600 mt-3 text-lg">Mark your calendars for our monthly weekend outdoor trips, service projects, and weekly troop meetings.</p>
+                </div>
+
+                <div class="grid lg:grid-cols-12 gap-8 items-start">
+                    <!-- Events List -->
+                    <div class="lg:col-span-8 space-y-4" id="eventsListContainer">
+                        <!-- Events populated by JS -->
+                    </div>
+
+                    <!-- Sidebar Calendar Overview -->
+                    <div class="lg:col-span-4 bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-6">
+                        <h3 class="text-lg font-bold text-slate-900 border-b pb-3 flex items-center justify-between">
+                            <span>Meeting Schedule</span>
+                            <i class="fa-solid fa-clock text-scout-green"></i>
+                        </h3>
+                        
+                        <div class="space-y-4 text-sm">
+                            <div class="flex gap-3">
+                                <div class="text-scout-green text-xl pt-0.5"><i class="fa-solid fa-calendar-check"></i></div>
+                                <div>
+                                    <h4 class="font-bold text-slate-800">Weekly Troop Meetings</h4>
+                                    <p class="text-slate-600">Every Tuesday • 7:00 PM – 8:30 PM</p>
+                                    <p class="text-xs text-slate-400 mt-1">Pine Ridge Community Center Gym</p>
+                                </div>
+                            </div>
+
+                            <div class="flex gap-3">
+                                <div class="text-scout-amber text-xl pt-0.5"><i class="fa-solid fa-user-shield"></i></div>
+                                <div>
+                                    <h4 class="font-bold text-slate-800">Patrol Leaders Council (PLC)</h4>
+                                    <p class="text-slate-600">1st Tuesday of the month • 6:15 PM</p>
+                                </div>
+                            </div>
+
+                            <div class="flex gap-3">
+                                <div class="text-scout-lightgreen text-xl pt-0.5"><i class="fa-solid fa-campground"></i></div>
+                                <div>
+                                    <h4 class="font-bold text-slate-800">Monthly Campouts</h4>
+                                    <p class="text-slate-600">3rd Weekend of every month</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-scout-parchment rounded-2xl border border-scout-accent/40 text-xs text-slate-700 space-y-2">
+                            <p class="font-bold text-scout-forest"><i class="fa-solid fa-circle-info mr-1 text-scout-amber"></i> Uniform Policy:</p>
+                            <p>Scouts are required to wear Class A (Full Field Uniform) for weekly meetings and Courts of Honor. Class B (Troop T-Shirt) for campouts and work projects.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="toolbox" class="py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <span class="text-scout-green font-bold text-sm tracking-widest uppercase">Essential Knowledge</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-scout-forest mt-2">Interactive Scout Toolbox</h2>
+                    <p class="text-slate-600 mt-3 text-lg">Interactive reference materials for rank advancement and campfires.</p>
+                </div>
+
+                <!-- Sub-tabs -->
+                <div class="flex justify-center border-b border-slate-200 mb-10">
+                    <button onclick="switchToolboxTab('knots')" id="toolTab-knots" class="tab-btn active px-6 py-3 font-bold text-slate-600 hover:text-scout-green flex items-center gap-2">
+                        <i class="fa-solid fa-rope"></i> Knot Tying Guide
+                    </button>
+                    <button onclick="switchToolboxTab('songs')" id="toolTab-songs" class="tab-btn px-6 py-3 font-bold text-slate-600 hover:text-scout-green flex items-center gap-2">
+                        <i class="fa-solid fa-music"></i> Campfire Songbook & Skits
+                    </button>
+                </div>
+
+                <!-- Tool Tab Content: KNOTS -->
+                <div id="toolContent-knots" class="grid lg:grid-cols-12 gap-8 items-center">
+                    <div class="lg:col-span-5 space-y-4">
+                        <h3 class="text-2xl font-bold text-slate-900">Essential Scouting Knots</h3>
+                        <p class="text-slate-600 text-sm">Mastering knots is a foundational scout skill used for pioneering, securing gear, and emergency rescues.</p>
+                        <div class="space-y-2" id="knotsList">
+                            <!-- Knots buttons rendered by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Knot Visual Display Card -->
+                    <div class="lg:col-span-7 bg-slate-900 text-white p-6 sm:p-8 rounded-3xl shadow-xl min-h-[380px] flex flex-col justify-between relative overflow-hidden" id="knotDisplayCard">
+                        <!-- Injected via JS -->
+                    </div>
+                </div>
+
+                <!-- Tool Tab Content: SONGS -->
+                <div id="toolContent-songs" class="hidden">
+                    <div class="grid md:grid-cols-2 gap-6" id="songbookGrid">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="quiz" class="py-20 bg-slate-100 scout-pattern text-white">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="bg-white text-slate-900 rounded-3xl p-6 sm:p-10 shadow-2xl border-4 border-scout-amber">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-6">
+                        <div>
+                            <span class="bg-scout-amber/10 text-scout-amber px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Scout Challenge</span>
+                            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">Outdoor Skills & Trivia Quiz</h2>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-xs text-slate-400 block uppercase">Current Score</span>
+                            <span class="text-2xl font-black text-scout-green" id="quizScore">0 PTS</span>
+                        </div>
+                    </div>
+
+                    <div id="quizBox">
+                        <!-- Interactive Quiz Loaded Here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="gallery" class="py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <span class="text-scout-amber font-bold text-sm tracking-widest uppercase">Memories on the Trail</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-scout-forest mt-2">Troop Photo Gallery</h2>
+                    <p class="text-slate-600 mt-3 text-lg">A look back at our recent high adventures, summer camps, and service projects.</p>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="relative group overflow-hidden rounded-2xl shadow-md bg-slate-200 h-64">
+                        <img src="https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?auto=format&fit=crop&w=800&q=80" alt="Campfire" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-300 p-4 flex flex-col justify-end text-white">
+                            <p class="font-bold text-sm">Summer Camp Fire</p>
+                            <p class="text-xs text-slate-300">Camp Grizzly • July 2025</p>
+                        </div>
+                    </div>
+                    <div class="relative group overflow-hidden rounded-2xl shadow-md bg-slate-200 h-64">
+                        <img src="https://images.unsplash.com/photo-1510312305653-8ed496efae75?auto=format&fit=crop&w=800&q=80" alt="Tent Camping" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-300 p-4 flex flex-col justify-end text-white">
+                            <p class="font-bold text-sm">Pine Ridge Overnighter</p>
+                            <p class="text-xs text-slate-300">Patrol Competition</p>
+                        </div>
+                    </div>
+                    <div class="relative group overflow-hidden rounded-2xl shadow-md bg-slate-200 h-64">
+                        <img src="https://images.unsplash.com/photo-1537225228614-56cc3556d7ed?auto=format&fit=crop&w=800&q=80" alt="Canoeing" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-300 p-4 flex flex-col justify-end text-white">
+                            <p class="font-bold text-sm">Boundary Waters Canoe Trip</p>
+                            <p class="text-xs text-slate-300">High Adventure Patrol</p>
+                        </div>
+                    </div>
+                    <div class="relative group overflow-hidden rounded-2xl shadow-md bg-slate-200 h-64">
+                        <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80" alt="Mountain Trek" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-300 p-4 flex flex-col justify-end text-white">
+                            <p class="font-bold text-sm">Philmont Expedition Trek</p>
+                            <p class="text-xs text-slate-300">Peak Summit • 11,200ft</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-scout-forest text-slate-300 pt-16 pb-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-slate-800">
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-scout-green text-scout-accent flex items-center justify-center text-xl font-bold">
+                            <i class="fa-solid fa-compass"></i>
+                        </div>
+                        <span class="text-xl font-extrabold text-white tracking-tight">TROOP 108</span>
+                    </div>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        Pine Ridge Scout Troop 108 is dedicated to youth leadership, character building, outdoor adventure, and citizenship development.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold text-sm mb-4 uppercase tracking-wider">Quick Navigation</h4>
+                    <ul class="space-y-2 text-xs">
+                        <li><button onclick="scrollToSection('about')" class="hover:text-scout-accent transition">Patrol Roster</button></li>
+                        <li><button onclick="scrollToSection('advancement')" class="hover:text-scout-accent transition">Trail to Eagle</button></li>
+                        <li><button onclick="scrollToSection('badges')" class="hover:text-scout-accent transition">Merit Badge List</button></li>
+                        <li><button onclick="scrollToSection('events')" class="hover:text-scout-accent transition">Camp Calendar</button></li>
+                        <li><button onclick="scrollToSection('toolbox')" class="hover:text-scout-accent transition">Knot & Song Guide</button></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold text-sm mb-4 uppercase tracking-wider">Leadership Contact</h4>
+                    <ul class="space-y-2 text-xs text-slate-400">
+                        <li><strong class="text-slate-200">Scoutmaster:</strong> David Miller</li>
+                        <li><i class="fa-solid fa-envelope mr-1 text-scout-amber"></i> scoutmaster@troop108pineridge.org</li>
+                        <li class="pt-2"><strong class="text-slate-200">Committee Chair:</strong> Sarah Jenkins</li>
+                        <li><i class="fa-solid fa-phone mr-1 text-scout-amber"></i> (555) 382-9108</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold text-sm mb-4 uppercase tracking-wider">Meeting Location</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed mb-3">
+                        Pine Ridge Community Guild<br>
+                        1420 Evergreen Wilderness Way<br>
+                        Pine Ridge, CO 80501
+                    </p>
+                    <span class="inline-block bg-slate-800 text-scout-accent text-xs px-3 py-1.5 rounded-lg border border-slate-700">
+                        <i class="fa-solid fa-clock mr-1"></i> Tuesdays @ 7:00 PM
+                    </span>
+                </div>
+            </div>
+
+            <div class="pt-8 flex flex-col sm:flex-row justify-between items-center text-xs text-slate-500 gap-4">
+                <p>&copy; 2026 Scout Troop 108. Prepared For Life. All Rights Reserved.</p>
+                <div class="flex gap-4">
+                    <a href="#" class="hover:text-slate-300">Privacy Policy</a>
+                    <a href="#" class="hover:text-slate-300">Parent Portal</a>
+                    <a href="#" class="hover:text-slate-300">Youth Protection Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div id="joinModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal('joinModal')" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700 text-xl w-8 h-8 rounded-full flex items-center justify-center bg-slate-100">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="text-center mb-6">
+                <div class="w-14 h-14 bg-scout-green text-scout-accent rounded-2xl flex items-center justify-center text-2xl mx-auto mb-3 shadow-md">
+                    <i class="fa-solid fa-compass"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-slate-900">Join Troop 108</h3>
+                <p class="text-xs text-slate-500 mt-1">Open for youth ages 11-17. Fill out the interest form below and our Scoutmaster will reach out!</p>
+            </div>
+
+            <form id="joinForm" onsubmit="handleJoinSubmit(event)" class="space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Scout's First Name *</label>
+                        <input type="text" required class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-scout-green focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Scout's Last Name *</label>
+                        <input type="text" required class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-scout-green focus:outline-none">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Scout's Age *</label>
+                        <input type="number" min="10" max="17" required class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-scout-green focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Current Grade *</label>
+                        <input type="text" placeholder="e.g. 6th Grade" required class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-scout-green focus:outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Parent/Guardian Name *</label>
+                    <input type="text" required class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-scout-green focus:outline-none">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Email Address *</label>
+                        <input type="email" required class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-scout-green focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Phone Number *</label>
+                        <input type="tel" required class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-scout-green focus:outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Questions or Scouting Experience</label>
+                    <textarea rows="2" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-scout-green focus:outline-none" placeholder="e.g. Transferring from Webelos, interested in camping..."></textarea>
+                </div>
+
+                <button type="submit" class="w-full bg-scout-amber hover:bg-scout-tan text-white font-bold py-3 rounded-xl shadow-md transition text-sm">
+                    Submit Application Request
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div id="rsvpModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl relative">
+            <button onclick="closeModal('rsvpModal')" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700 text-xl w-8 h-8 rounded-full flex items-center justify-center bg-slate-100">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="text-center mb-6">
+                <div class="w-12 h-12 bg-scout-amber text-white rounded-2xl flex items-center justify-center text-xl mx-auto mb-2 shadow">
+                    <i class="fa-regular fa-calendar-check"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900" id="rsvpTitle">Event RSVP</h3>
+                <p class="text-xs text-slate-500 mt-1" id="rsvpDate"></p>
+            </div>
+
+            <form onsubmit="handleRsvpSubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Scout Name *</label>
+                    <input type="text" required class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-scout-green focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Patrol Name</label>
+                    <select class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-scout-green focus:outline-none">
+                        <option>Screaming Eagles</option>
+                        <option>Timber Wolves</option>
+                        <option>Shadow Cobras</option>
+                        <option>Phoenix Patrol</option>
+                        <option>Adult Leader / Parent</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Dietary Restrictions or Special Needs</label>
+                    <input type="text" placeholder="None, Vegetarian, Allergies..." class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-scout-green focus:outline-none">
+                </div>
+                <button type="submit" class="w-full bg-scout-green hover:bg-scout-lightgreen text-white font-bold py-3 rounded-xl shadow transition text-sm">
+                    Confirm Event RSVP
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div id="badgeModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal('badgeModal')" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700 text-xl w-8 h-8 rounded-full flex items-center justify-center bg-slate-100">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div id="badgeModalContent">
+                <!-- Dynamically populated -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playBeep(freq = 440, type = 'sine', duration = 0.1) {
+            try {
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch(e) {}
+        }
+
+        const ranksData = {
+            scout: {
+                title: "1. Scout Rank",
+                badge: "⚜️",
+                subtitle: "Joining the Brotherhood",
+                description: "The Scout rank is earned upon joining Troop 108. It demonstrates knowledge of fundamental scouting principles, safety rules, and the oath.",
+                requirements: [
+                    "Learn and recite the Scout Oath, Scout Law, Motto, and Slogan.",
+                    "Demonstrate the Scout Sign, Salute, and Handshake.",
+                    "Tie the Square Knot, Bowline, and Two Half-Hitches.",
+                    "Understand pocketknife safety and earn your Whittling Chip / Totin' Chip.",
+                    "Participate in a Scoutmaster Conference."
+                ]
+            },
+            tenderfoot: {
+                title: "2. Tenderfoot Rank",
+                badge: "🌲",
+                subtitle: "First Step into the Wilderness",
+                description: "Focuses on fundamental outdoor camping, physical fitness, hiking safety, and basic first aid skills.",
+                requirements: [
+                    "Spend at least 1 night on a troop campout in a tent you pitched.",
+                    "Demonstrate basic first aid for burns, cuts, insect stings, and blisters.",
+                    "Record improvement in 30-day physical fitness challenge (pushups, situps, 1-mile walk/run).",
+                    "Demonstrate how to safely use a map and compass on a 1-mile hike."
+                ]
+            },
+            secondClass: {
+                title: "3. Second Class Rank",
+                badge: "🧭",
+                subtitle: "Navigating the Outdoor Path",
+                description: "Expansion of land navigation, campfire building, water safety, and initial community service hours.",
+                requirements: [
+                    "Participate in 5 separate troop events/campouts.",
+                    "Build a fire safely using tinder, kindling, and fuel wood.",
+                    "Demonstrate 5-mile compass course navigation.",
+                    "Complete 2 hours of approved troop service project work."
+                ]
+            },
+            firstClass: {
+                title: "4. First Class Rank",
+                badge: "⛰️",
+                subtitle: "Complete Outdoor Self-Reliance",
+                description: "The peak of practical outdoor skills. A First Class Scout can lead a patrol on a wilderness expedition safely.",
+                requirements: [
+                    "Participate in 10 troop campouts.",
+                    "Plan and cook 3 meals over camp stoves for your patrol.",
+                    "Demonstrate advanced first aid (CPR, splints, tourniquet, shock care).",
+                    "Complete 6 hours of community service."
+                ]
+            },
+            star: {
+                title: "5. Star Rank",
+                badge: "⭐",
+                subtitle: "Leadership & Community Service",
+                description: "Shifts focus from outdoor skills to troop leadership positions and earning specific merit badges.",
+                requirements: [
+                    "Earn 6 Merit Badges (including 4 Eagle-required).",
+                    "Serve 4 months in a troop leadership position (e.g. Patrol Leader, Scribe).",
+                    "Perform 6 hours of community service."
+                ]
+            },
+            life: {
+                title: "6. Life Rank",
+                badge: "🌟",
+                subtitle: "Mentorship & Preparation for Eagle",
+                description: "Demonstrates deep active mentorship to younger scouts and substantial progress towards the Eagle rank.",
+                requirements: [
+                    "Earn 11 Merit Badges total (including 7 Eagle-required).",
+                    "Serve 6 months in a key troop leadership position.",
+                    "Perform 6 hours of community service and mentor younger scouts."
+                ]
+            },
+            eagle: {
+                title: "7. Eagle Scout Rank",
+                badge: "🦅",
+                subtitle: "The Highest Honor in Scouting",
+                description: "Earning Eagle Scout represents years of dedication, leadership, citizenship, and the completion of a major community service project.",
+                requirements: [
+                    "Earn 21 Merit Badges (including 14 mandatory Eagle-required badges).",
+                    "Plan, develop, and lead a major community service project (Eagle Project).",
+                    "Serve 6 months in a senior leadership role.",
+                    "Pass a rigorous Eagle Scout Board of Review."
+                ]
+            }
+        };
+
+        const badgesData = [
+            { id: 'camping', name: 'Camping', category: 'eagle', icon: 'fa-campground', color: 'bg-emerald-500', reqs: 'Spend 20 nights camping, demonstrate campsite setup, foul-weather gear, and Leave No Trace.' },
+            { id: 'firstaid', name: 'First Aid', category: 'eagle', icon: 'fa-kit-medical', color: 'bg-red-500', reqs: 'Demonstrate treatment for shock, fractures, CPR, hypothermia, heatstroke, and emergency preparedness.' },
+            { id: 'environmental', name: 'Environmental Science', category: 'eagle', icon: 'fa-leaf', color: 'bg-green-600', reqs: 'Conduct ecosystem experiments, study endangered species, air/water pollution, and conservation.' },
+            { id: 'citizenship', name: 'Citizenship in Nation', category: 'eagle', icon: 'fa-flag-usa', color: 'bg-blue-600', reqs: 'Study the U.S. Constitution, federal government branches, landmark supreme court cases, and write to a senator.' },
+            { id: 'swimming', name: 'Swimming', category: 'eagle', icon: 'fa-person-swimming', color: 'bg-cyan-500', reqs: 'Pass BSA Swim test, demonstrate sidestroke, breaststroke, backstroke, surface dives, and water rescues.' },
+            { id: 'orienteering', name: 'Orienteering', category: 'outdoor', icon: 'fa-compass', color: 'bg-amber-600', reqs: 'Master map contour lines, declination, control points, and complete a 3km wilderness orienteering course.' },
+            { id: 'robotics', name: 'Robotics', category: 'stem', icon: 'fa-robot', color: 'bg-indigo-600', reqs: 'Design, build, and program an autonomous robot to navigate an obstacle course or complete tasks.' },
+            { id: 'astronomy', name: 'Astronomy', category: 'stem', icon: 'fa-star-and-crescent', color: 'bg-purple-600', reqs: 'Identify constellations, planets, moon phases, light pollution, and observe deep sky objects with a telescope.' },
+            { id: 'cooking', name: 'Cooking', category: 'eagle', icon: 'fa-utensils', color: 'bg-orange-500', reqs: 'Plan balanced nutrition menus, cook outdoors on Dutch ovens, backpacking stoves, and home meal prep.' },
+            { id: 'wilderness', name: 'Wilderness Survival', category: 'outdoor', icon: 'fa-fire', color: 'bg-amber-700', reqs: 'Build a natural debris shelter, start a fire without matches, signal for rescue, and survive 1 night solo.' },
+            { id: 'cybersecurity', name: 'Digital Technology', category: 'stem', icon: 'fa-laptop-code', color: 'bg-teal-600', reqs: 'Explore binary code, network architecture, digital safety, encryption, and computer programming.' },
+            { id: 'climbing', name: 'Climbing', category: 'outdoor', icon: 'fa-mountain', color: 'bg-stone-600', reqs: 'Demonstrate belaying techniques, harness safety, knot tying (Figure 8), and rappelling on natural rock walls.' }
+        ];
+
+        const eventsData = [
+            {
+                id: 1,
+                title: "Fall Wilderness Backpacking Campout",
+                date: "OCTOBER 17 - 19, 2026",
+                location: "Lost Creek Wilderness Area",
+                type: "High Adventure",
+                description: "12-mile trek through fall foliage. Focus on Wilderness Survival badge and patrol cooking.",
+                badge: "Outdoor"
+            },
+            {
+                id: 2,
+                title: "Annual Troop Court of Honor & Feast",
+                date: "NOVEMBER 10, 2026",
+                location: "Pine Ridge Community Center",
+                type: "Ceremony",
+                description: "Recognizing scout rank advancements, merit badge awards, and family potluck dinner.",
+                badge: "Awards"
+            },
+            {
+                id: 3,
+                title: "Community Food Drive & Service Day",
+                date: "DECEMBER 05, 2026",
+                location: "Pine Ridge Central Square",
+                type: "Service",
+                description: "Collecting non-perishable goods for local food pantries. Goal: 2,000 lbs of food collected!",
+                badge: "Service"
+            }
+        ];
+
+        const knotsData = [
+            {
+                id: 'square',
+                name: 'Square Knot (Reef Knot)',
+                use: 'Joining two ropes of equal diameter. Used in first aid for tying bandages.',
+                difficulty: 'Beginner',
+                steps: [
+                    'Right over left and under.',
+                    'Left over right and under.',
+                    'Pull tight to form a neat square symmetry.'
+                ]
+            },
+            {
+                id: 'bowline',
+                name: 'The Bowline',
+                use: 'The King of Knots. Creates a secure fixed loop at the end of a rope. Never slips or jams under heavy loads.',
+                difficulty: 'Intermediate',
+                steps: [
+                    'Form a small loop (the "rabbit hole").',
+                    'The rabbit comes UP out of the hole.',
+                    'The rabbit goes AROUND the tree (standing line).',
+                    'The rabbit goes BACK DOWN into the hole and pull tight.'
+                ]
+            },
+            {
+                id: 'clove',
+                name: 'Clove Hitch',
+                use: 'Starting and ending pioneering lashings on wooden posts.',
+                difficulty: 'Intermediate',
+                steps: [
+                    'Make a turn around the post with the rope working end.',
+                    'Cross over the standing part and make another turn.',
+                    'Tuck the working end under the second turn and pull taut.'
+                ]
+            },
+            {
+                id: 'tautline',
+                name: 'Taut-Line Hitch',
+                use: 'An adjustable friction hitch for tent guy lines. Allows tightening line without re-tying.',
+                difficulty: 'Advanced',
+                steps: [
+                    'Wrap the working end inside the loop twice toward the anchor.',
+                    'Bring the working end outside and across the standing part.',
+                    'Make one wrap outside the loop and tuck under to lock.'
+                ]
+            }
+        ];
+
+        const songsData = [
+            {
+                title: "The Scout Vesper Song",
+                type: "Campfire Song",
+                lyrics: "Softly falls the light of day,\nAs our campfire fades away.\nSilently each Scout should ask,\nHave I done my daily task?\nHave I kept my honor bright?\nCan I guiltless sleep tonight?\nHave I done and have I dared,\nEverything to be prepared?"
+            },
+            {
+                title: "The Invisible Bench",
+                type: "Popular Skit",
+                lyrics: "Scout 1 sits on an imaginary bench in mid-air.\nScout 2: 'What are you doing?'\nScout 1: 'Just sitting on this invisible bench.'\nScout 2 joins him. Scout 3 joins.\nScout 4 walks in: 'Hey guys, I moved the invisible bench over there 5 minutes ago!'\nAll scouts fall to the ground!"
+            }
+        ];
+
+        const quizQuestions = [
+            {
+                q: "What is the primary rule for knife safety when using a pocketknife?",
+                options: [
+                    "Always cut towards your hand for control.",
+                    "Establish a 'Safety Circle' (arm length around you) before opening.",
+                    "Keep the blade oiled so it slips easily.",
+                    "Pass an open knife to a friend blade-first."
+                ],
+                correct: 1
+            },
+            {
+                q: "When navigating with a map and compass, what does 'magnetic declination' refer to?",
+                options: [
+                    "The angle between True North and Magnetic North.",
+                    "The altitude difference on contour lines.",
+                    "The weight of your compass needle.",
+                    "The distance to your campsite."
+                ],
+                correct: 0
+            },
+            {
+                q: "In the 'Leave No Trace' outdoor ethics, what should you do with dishwashing wastewater?",
+                options: [
+                    "Pour it directly into the nearest stream or lake.",
+                    "Strain food scraps and scatter greywater 200 feet away from water sources.",
+                    "Bury it inside your tent footprint.",
+                    "Leave it in a pot overnight."
+                ],
+                correct: 1
+            }
+        ];
+
+        let currentKnot = 'square';
+        let currentQuizIndex = 0;
+        let quizScore = 0;
+
+        window.onload = function() {
+            // Render Initial Dynamic Sections
+            selectRank('scout');
+            renderBadges(badgesData);
+            renderEvents();
+            renderKnotsList();
+            renderKnotDisplay(currentKnot);
+            renderSongbook();
+            loadQuizQuestion(0);
+        };
+
+        function scrollToSection(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.remove('hidden');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        /* Rank Selection Handler */
+        function selectRank(rankKey) {
+            playBeep(520, 'sine', 0.08);
+            document.querySelectorAll('.rank-tab').forEach(btn => {
+                btn.classList.remove('bg-scout-green', 'text-white', 'shadow-sm');
+                btn.classList.add('text-slate-600');
+            });
+
+            const activeBtn = document.getElementById(`rankBtn-${rankKey}`);
+            if (activeBtn) {
+                activeBtn.classList.add('bg-scout-green', 'text-white', 'shadow-sm');
+                activeBtn.classList.remove('text-slate-600');
+            }
+
+            const r = ranksData[rankKey];
+            const card = document.getElementById('rankDetailCard');
+            card.innerHTML = `
+                <div class="flex flex-col md:flex-row gap-6 items-start justify-between border-b border-slate-200 pb-6 mb-6">
+                    <div class="flex items-center gap-4">
+                        <div class="text-5xl bg-white p-4 rounded-2xl shadow-sm border border-slate-200">${r.badge}</div>
+                        <div>
+                            <span class="text-xs font-bold text-scout-amber uppercase tracking-widest">${r.subtitle}</span>
+                            <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900">${r.title}</h3>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-slate-700 mb-6 text-base leading-relaxed">${r.description}</p>
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                    <h4 class="font-bold text-slate-900 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-list-check text-scout-green"></i> Key Rank Advancement Milestones:
+                    </h4>
+                    <ul class="space-y-3">
+                        ${r.requirements.map(req => `
+                            <li class="flex items-start gap-3 text-sm text-slate-700">
+                                <i class="fa-solid fa-circle-check text-scout-lightgreen mt-1"></i>
+                                <span>${req}</span>
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>
+            `;
+        }
+
+        /* Merit Badges Logic */
+        function renderBadges(items) {
+            const grid = document.getElementById('badgesGrid');
+            grid.innerHTML = items.map(b => `
+                <div onclick="openBadgeModal('${b.id}')" class="bg-slate-800/80 border border-slate-700/80 rounded-2xl p-5 hover:border-scout-accent cursor-pointer transition transform hover:-translate-y-1 shadow-lg group">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="w-12 h-12 rounded-xl ${b.color} text-white flex items-center justify-center text-xl shadow">
+                            <i class="fa-solid ${b.icon}"></i>
+                        </div>
+                        ${b.category === 'eagle' ? '<span class="text-xs bg-amber-400/20 text-amber-300 font-bold px-2 py-1 rounded-md border border-amber-400/30">Eagle Req</span>' : ''}
+                    </div>
+                    <h3 class="font-bold text-lg text-white group-hover:text-scout-accent transition">${b.name}</h3>
+                    <p class="text-xs text-slate-400 mt-1 line-clamp-2">${b.reqs}</p>
+                    <div class="mt-4 pt-3 border-t border-slate-700/60 flex items-center justify-between text-xs text-scout-accent font-semibold">
+                        <span>View Requirements</span>
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterBadges(category) {
+            playBeep(480, 'sine', 0.05);
+            document.querySelectorAll('.badge-filter-btn').forEach(btn => {
+                btn.classList.remove('bg-scout-amber', 'text-white');
+                btn.classList.add('bg-white/10', 'text-slate-200');
+            });
+            const activeBtn = document.getElementById(`badgeFilter-${category}`);
+            if (activeBtn) {
+                activeBtn.classList.add('bg-scout-amber', 'text-white');
+                activeBtn.classList.remove('bg-white/10', 'text-slate-200');
+            }
+
+            if (category === 'all') {
+                renderBadges(badgesData);
+            } else {
+                const filtered = badgesData.filter(b => b.category === category);
+                renderBadges(filtered);
+            }
+        }
+
+        function searchBadges() {
+            const query = document.getElementById('badgeSearch').value.toLowerCase();
+            const filtered = badgesData.filter(b => b.name.toLowerCase().includes(query) || b.reqs.toLowerCase().includes(query));
+            renderBadges(filtered);
+        }
+
+        function openBadgeModal(id) {
+            const b = badgesData.find(item => item.id === id);
+            if (!b) return;
+            playBeep(600, 'sine', 0.1);
+            const container = document.getElementById('badgeModalContent');
+            container.innerHTML = `
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-14 h-14 rounded-2xl ${b.color} text-white flex items-center justify-center text-2xl shadow">
+                        <i class="fa-solid ${b.icon}"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-slate-900">${b.name}</h3>
+                        <p class="text-xs text-scout-green font-bold uppercase tracking-wider">${b.category === 'eagle' ? 'Eagle Scout Required Badge ⭐' : 'Elective Merit Badge'}</p>
+                    </div>
+                </div>
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 mb-4 text-sm text-slate-700">
+                    <h4 class="font-bold text-slate-900 mb-1">Badge Description & Core Focus:</h4>
+                    <p>${b.reqs}</p>
+                </div>
+                <div class="text-xs text-slate-500 mb-6">
+                    <p><strong>Counselor Sign-off Required:</strong> Yes. Contact Scoutmaster to obtain a signed Blue Card prior to starting work with a registered merit badge counselor.</p>
+                </div>
+                <button onclick="closeModal('badgeModal')" class="w-full bg-scout-green text-white py-2.5 rounded-xl font-bold hover:bg-scout-lightgreen transition text-sm">
+                    Close Details
+                </button>
+            `;
+            openModal('badgeModal');
+        }
+
+        /* Events Render & RSVP */
+        function renderEvents() {
+            const container = document.getElementById('eventsListContainer');
+            container.innerHTML = eventsData.map(ev => `
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-scout-khaki/30 text-scout-forest px-2.5 py-0.5 rounded-md text-xs font-bold">${ev.type}</span>
+                            <span class="text-xs text-slate-400"><i class="fa-solid fa-location-dot mr-1"></i>${ev.location}</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900">${ev.title}</h3>
+                        <p class="text-xs font-semibold text-scout-amber">${ev.date}</p>
+                        <p class="text-sm text-slate-600 pt-1">${ev.description}</p>
+                    </div>
+                    <button onclick="triggerRsvp('${ev.title}', '${ev.date}')" class="bg-scout-green hover:bg-scout-lightgreen text-white px-5 py-2.5 rounded-xl font-bold text-sm whitespace-nowrap shadow transition">
+                        RSVP / Sign Up
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function triggerRsvp(title, date) {
+            playBeep(500, 'sine', 0.08);
+            document.getElementById('rsvpTitle').innerText = title;
+            document.getElementById('rsvpDate').innerText = date;
+            openModal('rsvpModal');
+        }
+
+        function handleRsvpSubmit(e) {
+            e.preventDefault();
+            playBeep(700, 'sine', 0.2);
+            closeModal('rsvpModal');
+            alert('🎉 Thank you! Your RSVP has been registered with the Troop Scribe.');
+        }
+
+        function handleJoinSubmit(e) {
+            e.preventDefault();
+            playBeep(800, 'sine', 0.25);
+            closeModal('joinModal');
+            alert('🌲 Welcome! Your application request has been received. Our Scoutmaster will contact you within 24 hours!');
+        }
+
+        /* Toolbox Knot logic */
+        function switchToolboxTab(tab) {
+            playBeep(450, 'sine', 0.05);
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`toolTab-${tab}`).classList.add('active');
+
+            if (tab === 'knots') {
+                document.getElementById('toolContent-knots').classList.remove('hidden');
+                document.getElementById('toolContent-songs').classList.add('hidden');
+            } else {
+                document.getElementById('toolContent-knots').classList.add('hidden');
+                document.getElementById('toolContent-songs').classList.remove('hidden');
+            }
+        }
+
+        function renderKnotsList() {
+            const container = document.getElementById('knotsList');
+            container.innerHTML = knotsData.map(k => `
+                <button onclick="selectKnot('${k.id}')" id="knotBtn-${k.id}" class="knot-btn w-full text-left p-3 rounded-xl font-semibold border border-slate-200 text-sm hover:border-scout-green transition flex items-center justify-between ${k.id === currentKnot ? 'bg-scout-green text-white border-scout-green' : 'bg-slate-50 text-slate-700'}">
+                    <span>${k.name}</span>
+                    <span class="text-xs px-2 py-0.5 rounded ${k.id === currentKnot ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-600'}">${k.difficulty}</span>
+                </button>
+            `).join('');
+        }
+
+        function selectKnot(id) {
+            currentKnot = id;
+            playBeep(550, 'sine', 0.08);
+            renderKnotsList();
+            renderKnotDisplay(id);
+        }
+
+        function renderKnotDisplay(id) {
+            const k = knotsData.find(item => item.id === id);
+            const display = document.getElementById('knotDisplayCard');
+            display.innerHTML = `
+                <div>
+                    <div class="flex justify-between items-start border-b border-slate-700 pb-3 mb-4">
+                        <div>
+                            <span class="text-xs text-scout-accent font-bold uppercase tracking-widest">Knot Guide</span>
+                            <h3 class="text-2xl font-bold text-white">${k.name}</h3>
+                        </div>
+                        <span class="text-xs bg-scout-amber px-3 py-1 rounded-full font-bold text-white">${k.difficulty}</span>
+                    </div>
+                    <p class="text-sm text-slate-300 mb-6 font-medium"><strong>Primary Usage:</strong> ${k.use}</p>
+                    
+                    <h4 class="text-sm font-bold text-scout-accent mb-3 uppercase tracking-wider">Step-by-Step Tying Method:</h4>
+                    <ol class="space-y-3">
+                        ${k.steps.map((step, idx) => `
+                            <li class="flex items-start gap-3 text-sm text-slate-200">
+                                <span class="w-6 h-6 rounded-full bg-scout-green text-scout-accent flex items-center justify-center font-bold text-xs shrink-0">${idx + 1}</span>
+                                <span class="pt-0.5">${step}</span>
+                            </li>
+                        `).join('')}
+                    </ol>
+                </div>
+
+                <div class="mt-6 pt-4 border-t border-slate-800 flex justify-between items-center text-xs text-slate-400">
+                    <span><i class="fa-solid fa-ribbon mr-1 text-scout-accent"></i> Practice with 3ft 1/4" braided rope</span>
+                    <button onclick="playBeep(700, 'sine', 0.15)" class="text-scout-accent underline hover:text-white font-bold">Mark Practiced ✓</button>
+                </div>
+            `;
+        }
+
+        function renderSongbook() {
+            const container = document.getElementById('songbookGrid');
+            container.innerHTML = songsData.map(s => `
+                <div class="bg-slate-50 rounded-2xl p-6 border border-slate-200 shadow-sm">
+                    <span class="text-xs font-bold text-scout-amber uppercase tracking-wider">${s.type}</span>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">${s.title}</h3>
+                    <pre class="font-sans text-sm text-slate-700 whitespace-pre-wrap bg-white p-4 rounded-xl border border-slate-200 leading-relaxed">${s.lyrics}</pre>
+                </div>
+            `).join('');
+        }
+
+        /* Quiz Logic */
+        function loadQuizQuestion(index) {
+            currentQuizIndex = index;
+            const q = quizQuestions[index];
+            const box = document.getElementById('quizBox');
+
+            if (!q) {
+                box.innerHTML = `
+                    <div class="text-center py-8 space-y-4">
+                        <div class="text-5xl">🏆</div>
+                        <h3 class="text-2xl font-bold text-slate-900">Quiz Completed!</h3>
+                        <p class="text-slate-600">Your total score: <strong class="text-scout-green text-xl">${quizScore} / ${quizQuestions.length * 100} PTS</strong></p>
+                        <button onclick="restartQuiz()" class="bg-scout-amber text-white font-bold px-6 py-3 rounded-xl shadow hover:bg-scout-tan transition">
+                            Retake Quiz
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            box.innerHTML = `
+                <div class="space-y-4">
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Question ${index + 1} of ${quizQuestions.length}</span>
+                    <h3 class="text-lg font-bold text-slate-900">${q.q}</h3>
+
+                    <div class="space-y-2 pt-2">
+                        ${q.options.map((opt, optIdx) => `
+                            <button onclick="answerQuiz(${optIdx})" class="w-full text-left p-4 rounded-xl border border-slate-200 font-medium text-sm text-slate-700 hover:bg-scout-parchment hover:border-scout-accent transition flex items-center justify-between">
+                                <span>${opt}</span>
+                                <i class="fa-regular fa-circle text-slate-300"></i>
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function answerQuiz(optionIdx) {
+            const q = quizQuestions[currentQuizIndex];
+            if (optionIdx === q.correct) {
+                quizScore += 100;
+                playBeep(880, 'sine', 0.2);
+            } else {
+                playBeep(220, 'sawtooth', 0.25);
+            }
+
+            document.getElementById('quizScore').innerText = `${quizScore} PTS`;
+            loadQuizQuestion(currentQuizIndex + 1);
+        }
+
+        function restartQuiz() {
+            quizScore = 0;
+            document.getElementById('quizScore').innerText = `0 PTS`;
+            loadQuizQuestion(0);
+        }
+    </script>
+</body>
+</html>
